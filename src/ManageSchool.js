@@ -5,38 +5,28 @@ import axios from 'axios';
 
 const ManageSchool = (props) => {
   const { schools, setSchools, students, setStudents, setError } = props;
-  const { id } = props.match.params;
+  const { schoolid } = props.match.params;
   const [school, setSchool] = useState('')
-  const [schoolId, setSchoolId] = useState(id);
-
 
   useEffect(() => {
-    setError('');
-    if (schoolId) {
-      console.log('schoolId = ', schoolId)
+    if (schoolid) {
       setSchool(schools.reduce((acc, campus) => {
-        if (campus.id === schoolId) {
+        if (campus.id === schoolid) {
           acc = campus.name;
         }
         return acc;
       }, ''));
     }
-  }, [schoolId]);
+  }, []);
 
+  useEffect(() => {
+    setError('');
+  }, [])
 
-  const createSchool = async () => {
+  const updateSchool = async (ev) => {
+    ev.preventDefault();
     try {
-      const response = await axios.post('/api/schools', { name: school });
-      setSchools([...schools, response.data]);
-    } catch (err) {
-      setError(err);
-    }
-  }
-
-
-  const updateSchool = async () => {
-    try {
-      const response = await axios.put(`/api/schools/${schoolId}`, { name: school });
+      const response = await axios.put(`/api/schools/${schoolid}`, { name: school });
       setSchools(schools.map(campus => {
         if (campus.id === response.data.id) {
           campus.name = response.data.name;
@@ -46,7 +36,7 @@ const ManageSchool = (props) => {
     } catch (err) {
       setError(err);
     }
-    setSchool('');
+    history.pushState('/');
   }
 
 
@@ -59,51 +49,30 @@ const ManageSchool = (props) => {
     });
     Promise.all([
       axios.put(`/api/schools/bulkResetStudents/${school}`), //this should be part of delete in the db (whene I figure out how)
-      axios.delete(`/api/schools/${schoolId}`)
+      axios.delete(`/api/schools/${schoolid}`)
     ]);
     setStudents(updatedStudents);
-    setSchools(schools.filter(item => item.id !== schoolId));
-    setSchool('');
-    setSchoolId('');
-  }
-
-
-  const handleSchool = (ev) => {
-    ev.preventDefault();
-    if (!schoolId) {
-      createSchool();
-    } else {
-      updateSchool();
-    }
-    setSchoolId('');
+    setSchools(schools.filter(item => item.id !== schoolid));
+    history.pushState('/');
   }
 
 
   return (
     <div className="form-container">
-      {!schoolId && <h3>Create School</h3>}
-      {!!schoolId && <h3>Managing {school}</h3>}
-      <form onSubmit={ev => handleSchool(ev)}>
+      {!!schoolid && <h3>Managing {school}</h3>}
+      <form onSubmit={ev => updateSchool(ev)}>
         <input
           type="text" value={school} placeholder="school name"
           onChange={ev => setSchool(ev.target.value)}
         />
-        <input type="submit" value="Submit" />
+        <input type="submit" value="Submit" disabled={!school} />
         <button
-          className="delete-button" type="button" disabled={schoolId === undefined}
+          className="delete-button" type="button" disabled={!schoolid}
           onClick={() => deleteSchool()}>
           Delete
         </button>
       </form>
       <Link to="/"><h3>Back to Main View</h3></Link>
-      <h3>Click to Manage a School</h3>
-      <ul>
-        {schools.map(campus => {
-          return (
-            <li key={campus.id} onClick={() => setSchoolId(campus.id)}>{campus.name}</li>
-          )
-        })}
-      </ul>
     </div>
   )
 }

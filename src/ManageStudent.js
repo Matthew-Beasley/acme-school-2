@@ -4,40 +4,28 @@ import axios from 'axios';
 
 
 const ManageStudent = (props) => {
-  const { students, setStudents, schools, setError } = props;
-  const { id } = props.match.params;
+  const { students, setStudents, schools, history, setError } = props;
+  const { studentid } = props.match.params;
   const [student, setStudent] = useState('');
   const [school, setSchool] = useState('');
-  const [studentId, setStudentId] = useState(id);
 
 
   useEffect(() => {
-    setError('');
-    if (studentId) {
+    if (studentid) {
       setStudent(students.reduce((acc, pupil) => {
-        if (pupil.id === studentId) {
+        if (pupil.id === studentid) {
           acc = pupil.name;
         }
         return acc;
       }, ''))
     }
-  }, [studentId]);
+  }, []);
 
 
-  const createStudent = async () => {
+  const updateStudent = async (ev) => {
+    ev.preventDefault();
     try {
-      const response = await axios.post('/api/students', { name: student, school });
-      setStudents([...students, response.data]);
-    } catch (err) {
-      setError(err.message)
-    }
-    setStudent('');
-  }
-
-
-  const updateStudent = async () => {
-    try {
-      const response = await axios.put(`/api/students/${id}`, { name: student, school });
+      const response = await axios.put(`/api/students/${studentid}`, { name: student, school });
       setStudents(students.map(pupil => {
         if (pupil.id === response.data.id) {
           pupil.name = response.data.name;
@@ -48,39 +36,26 @@ const ManageStudent = (props) => {
     } catch (err) {
       setError(err.message);
     }
-    setStudent('');
+    history.push('/');
   }
 
 
   const deleteStudent = async () => {
     try {
-      await axios.delete(`/api/students/${studentId}`);
-      setStudents(students.filter(filteredStudent => filteredStudent.id !== studentId));
-      setStudent('');
+      await axios.delete(`/api/students/${studentid}`);
+      setStudents(students.filter(filteredStudent => filteredStudent.id !== studentid));
     } catch (err) {
       setError(err);
     }
-    setStudentId('');
-  }
-
-
-  const handleStudent = (ev) => {
-    ev.preventDefault();
-    if (!studentId) {
-      createStudent();
-    } else {
-      updateStudent();
-    }
-    setStudentId('')
+    history.push('/');
   }
 
 
   return (
     <div className="form-container">
-      {console.log('studentId = ', studentId)}
-      {!studentId && <h3> Create Student</h3>}
-      {!!studentId && <h3>Managing {student}</h3>}
-      <form onSubmit={ev => handleStudent(ev)}>
+      {!studentid && <h3> Create Student</h3>}
+      {!!studentid && <h3>Managing {student}</h3>}
+      <form onSubmit={ev => updateStudent(ev)}>
         <input
           type="text" placeholder="student name" value={student}
           onChange={ev => setStudent(ev.target.value)}
@@ -95,20 +70,12 @@ const ManageStudent = (props) => {
         </select>
         <input type="submit" value="Submit" />
         <button
-          className="delete-button" type="button" disabled={studentId === undefined}
+          className="delete-button" type="button" disabled={studentid === undefined}
           onClick={() => deleteStudent()}>
           Delete
         </button>
       </form>
       <Link to="/"><h3>Back to Main View</h3></Link>
-      <h3>Click to Manage a Student</h3>
-      <ul>
-        {students.map(pupil => {
-          return (
-            <li key={pupil.id} onClick={() => setStudentId(pupil.id)}>{pupil.name}</li>
-          )
-        })}
-      </ul>
     </div>
   )
 }

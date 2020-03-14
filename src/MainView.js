@@ -1,9 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import AddStudent from './AddStudent';
+import AddSchool from './AddSchool';
 
 
-const MainView = ({ students, setStudents, schools, setError }) => {
+const MainView = ({ students, setStudents, schools, setSchools, setError }) => {
 
   const updateDbEnrollment = async (pupil) => {
     try {
@@ -42,7 +44,15 @@ const MainView = ({ students, setStudents, schools, setError }) => {
 
   return (
     <div id="main-view">
-      
+      <div id="mainview-forms">
+        <AddStudent
+          students={students} setStudents={setStudents}
+          schools={schools} setError={setError}
+        />
+        <AddSchool
+          schools={schools} setSchools={setSchools} setError={setError}
+        />
+      </div>
       <div className="main-div">
         <h3>Not Enrolled</h3>
         <ul>
