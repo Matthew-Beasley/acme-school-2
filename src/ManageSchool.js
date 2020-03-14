@@ -47,7 +47,6 @@ const ManageSchool = (props) => {
     });
     try {
       Promise.all([
-        axios.put(`/api/schools/bulkResetStudents/${school}`), //this should be part of delete in the db (whene I figure out how)
         axios.delete(`/api/schools/${schoolid}`)
       ]);
     } catch (err) {

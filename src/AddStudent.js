@@ -3,14 +3,17 @@ import axios from 'axios';
 
 
 const AddStudent = (props) => {
-  const { students, setStudents, schools, setError } = props;
+  const { students, setStudents, schools, getSchoolFromName, setError } = props;
   const [student, setStudent] = useState('');
   const [school, setSchool] = useState('');
 
+
   const createStudent = async (ev) => {
     ev.preventDefault();
+    const schoolObj = getSchoolFromName(school)
     try {
-      const response = await axios.post('/api/students', { name: student, school });
+      const response = await axios.post('/api/students',
+      { name: student, school: schoolObj.name, schoolId: schoolObj.id });
       setStudents([...students, response.data]);
       setError('');
     } catch (err) {
@@ -32,7 +35,7 @@ const AddStudent = (props) => {
         {schools.map(campus => {
           return (
             <option
-              key={campus.id} value={campus.id}>{campus.name}
+              key={campus.id} value={campus.name}>{campus.name}
             </option>
           )
         })}

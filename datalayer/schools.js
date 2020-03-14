@@ -14,15 +14,6 @@ const readSchools = async () => {
 }
 
 
-const bulkSetSchoolNull = async (school) => {
-  const sql = `
-  UPDATE students
-  SET school = NULL
-  WHERE school = $1;`;
-  return (await client.query(sql, [school])).rows;
-}
-
-
 const updateSchools = async (name, id) => {
   const sql = `
   UPDATE schools
@@ -34,16 +25,22 @@ const updateSchools = async (name, id) => {
 
 
 const deleteSchools = async (id) => {
-  const sql = `
+  const studentSql = `
+  UPDATE students
+  SET school = NULL,
+      "schoolId" = NULL
+  WHERE "schoolId" = $1;`;
+  await client.query(studentSql, [id]);
+
+  const schoolSql = `
   DELETE FROM schools
   WHERE id = $1;`;
-  await client.query(sql, [id]);
+  await client.query(schoolSql, [id]);
 }
 
 module.exports = {
   createSchools,
   readSchools,
   updateSchools,
-  bulkSetSchoolNull,
   deleteSchools
 };

@@ -7,6 +7,15 @@ import AddSchool from './AddSchool';
 
 const MainView = ({ students, setStudents, schools, setSchools, setError }) => {
 
+  const getSchoolFromName = (schoolName) => {
+    return schools.reduce((acc, campus) => {
+      if (schoolName === campus.name) {
+        acc = campus;
+      }
+      return acc
+    }, {})
+  }
+
   const updateDbEnrollment = async (pupil) => {
     try {
       await axios.put(`/api/students/${pupil.id}`,
@@ -52,9 +61,11 @@ const MainView = ({ students, setStudents, schools, setSchools, setError }) => {
         <AddStudent
           students={students} setStudents={setStudents}
           schools={schools} setError={setError}
+          getSchoolFromName={getSchoolFromName}
         />
         <AddSchool
           schools={schools} setSchools={setSchools} setError={setError}
+          getSchoolFromName={getSchoolFromName}
         />
       </div>
       <div className="main-div">
@@ -68,11 +79,11 @@ const MainView = ({ students, setStudents, schools, setSchools, setError }) => {
         </ul>
       </div>
 
-      {schools.map(institute => {
+      {schools.map(campus => {
         return (
-          <div className="main-div" key={institute.id}>
-            <h3><Link to={`/school/${institute.id}`}>{institute.name}</Link></h3>
-            <select onChange={ev => enrollStudent(ev.target.value, institute)}>
+          <div className="main-div" key={campus.id}>
+            <h3><Link to={`/school/${campus.id}`}>{campus.name}</Link></h3>
+            <select onChange={ev => enrollStudent(ev.target.value, campus)}>
               <option value="">enroll</option>
               {students.map(student => {
                 return (
@@ -82,7 +93,7 @@ const MainView = ({ students, setStudents, schools, setSchools, setError }) => {
 
             </select>
             <ul>
-              {students.filter(student => student.school === institute.name).map(filteredStudent => {
+              {students.filter(student => student.school === campus.name).map(filteredStudent => {
                 return (
                   <li key={filteredStudent.id}>
                     <Link to={`/student/${filteredStudent.id}`}>{filteredStudent.name}</Link>

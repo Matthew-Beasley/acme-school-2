@@ -3,7 +3,6 @@ const {
   createSchools,
   readSchools,
   updateSchools,
-  bulkSetSchoolNull,
   deleteSchools
 } = require('../datalayer/index');
 
@@ -35,20 +34,9 @@ schoolRouter.put('/:id', async (req, res, next) => {
   const { name } = req.body;
   try {
     const data = await updateSchools(name, id);
-    res.status(200).send(data);
+    res.status(201).send(data);
   } catch (error) {
     next(error);
-  }
-})
-
-
-schoolRouter.put('/bulkResetStudents/:school', async (req, res, next) => {
-  const { school } = req.params;
-  try {
-    const data = await bulkSetSchoolNull(school);
-    res.status(200).send(data);
-  } catch (error) {
-    next(error)
   }
 })
 

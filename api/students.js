@@ -34,7 +34,7 @@ studentRouter.put('/:id', async (req, res, next) => {
   const { name, school } = req.body;
   try {
     const data = await updateStudents(name, school, id);
-    res.status(200).send(data);
+    res.status(201).send(data);
   } catch (error) {
     next(error);
   }
