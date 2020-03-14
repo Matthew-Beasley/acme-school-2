@@ -10,11 +10,11 @@ const AddSchool = (props) => {
     ev.preventDefault();
     try {
       const response = await axios.post('/api/schools', { name: school });
-      console.log(response.data)
       setSchools([...schools, response.data]);
     } catch (err) {
       setError(err);
     }
+    setSchool('')
   }
 
 

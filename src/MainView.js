@@ -30,6 +30,10 @@ const MainView = ({ students, setStudents, schools, setSchools, setError }) => {
 
 
   const enrollStudent = (studentid, school) => {
+    if (!studentid) {
+      setError('No student selected')
+      return;
+    }
     let pupilObj = null;
     setStudents(students.map(pupil => {
       if (pupil.id === studentid) {

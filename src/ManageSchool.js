@@ -4,7 +4,7 @@ import axios from 'axios';
 
 
 const ManageSchool = (props) => {
-  const { schools, setSchools, students, setStudents, setError } = props;
+  const { schools, setSchools, students, setStudents, history, setError } = props;
   const { schoolid } = props.match.params;
   const [school, setSchool] = useState('')
 
@@ -36,7 +36,7 @@ const ManageSchool = (props) => {
     } catch (err) {
       setError(err);
     }
-    history.pushState('/');
+    history.push('/');
   }
 
 
@@ -53,7 +53,7 @@ const ManageSchool = (props) => {
     ]);
     setStudents(updatedStudents);
     setSchools(schools.filter(item => item.id !== schoolid));
-    history.pushState('/');
+    history.push('/');
   }
 
 
@@ -67,7 +67,7 @@ const ManageSchool = (props) => {
         />
         <input type="submit" value="Submit" disabled={!school} />
         <button
-          className="delete-button" type="button" disabled={!schoolid}
+          className="delete-button" type="button" disabled={!school}
           onClick={() => deleteSchool()}>
           Delete
         </button>

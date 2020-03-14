@@ -18,18 +18,6 @@ const AddStudent = (props) => {
     setStudent('');
   }
 
-/*
-  const deleteStudent = async () => {
-    try {
-      await axios.delete(`/api/students/${id}`);
-      setStudents(students.filter(filteredStudent => filteredStudent.id !== id));
-      setStudent('');
-    } catch (err) {
-      setError(err);
-    }
-    setStudent('');
-  }
-*/
 
   return (
     <form id="create-student" onSubmit={ev => createStudent(ev)}>
