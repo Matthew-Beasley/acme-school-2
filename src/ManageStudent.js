@@ -11,7 +11,8 @@ const ManageStudent = (props) => {
 
 
   useEffect(() => {
-    if (studentid) {
+    console.log(studentid)
+    if (studentid){
       setStudent(students.reduce((acc, pupil) => {
         if (pupil.id === studentid) {
           acc = pupil.name;
@@ -33,8 +34,9 @@ const ManageStudent = (props) => {
         }
         return pupil;
       }));
+      setError('');
     } catch (err) {
-      setError(err.message);
+      setError(err.response.data.message);
     }
     history.push('/');
   }
@@ -44,8 +46,9 @@ const ManageStudent = (props) => {
     try {
       await axios.delete(`/api/students/${studentid}`);
       setStudents(students.filter(filteredStudent => filteredStudent.id !== studentid));
+      setError('');
     } catch (err) {
-      setError(err);
+      setError(err.response.data.message);
     }
     history.push('/');
   }
@@ -53,8 +56,7 @@ const ManageStudent = (props) => {
 
   return (
     <div className="form-container">
-      {!studentid && <h3> Create Student</h3>}
-      {!!studentid && <h3>Managing {student}</h3>}
+      {!!studentid && <h2>Managing {student}</h2>}
       <form onSubmit={ev => updateStudent(ev)}>
         <input
           type="text" placeholder="student name" value={student}

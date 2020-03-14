@@ -35,13 +35,13 @@ const App = () => {
       />
 
       <Route
-        path={['/student/:studentid', '/student']} render={(props) => (<ManageStudent
+        path="/student/:studentid" render={(props) => (<ManageStudent
           students={students} setStudents={setStudents} schools={schools}
           history={history} setError={setError} {...props} />)}
       />
 
       <Route
-        path={['/school/:schoolid', '/school']} render={(props) => (<ManageSchool
+        path="/school/:schoolid" render={(props) => (<ManageSchool
           schools={schools} setSchools={setSchools} setStudents={setStudents}
           history={history} students={students} setError={setError} {...props} />)}
       />

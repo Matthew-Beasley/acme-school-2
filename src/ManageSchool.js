@@ -19,9 +19,6 @@ const ManageSchool = (props) => {
     }
   }, []);
 
-  useEffect(() => {
-    setError('');
-  }, [])
 
   const updateSchool = async (ev) => {
     ev.preventDefault();
@@ -33,8 +30,9 @@ const ManageSchool = (props) => {
         }
         return campus;
       }));
+      setError('');
     } catch (err) {
-      setError(err);
+      setError(err.response.data.message);
     }
     history.push('/');
   }
@@ -47,10 +45,14 @@ const ManageSchool = (props) => {
       }
       return pupil;
     });
-    Promise.all([
-      axios.put(`/api/schools/bulkResetStudents/${school}`), //this should be part of delete in the db (whene I figure out how)
-      axios.delete(`/api/schools/${schoolid}`)
-    ]);
+    try {
+      Promise.all([
+        axios.put(`/api/schools/bulkResetStudents/${school}`), //this should be part of delete in the db (whene I figure out how)
+        axios.delete(`/api/schools/${schoolid}`)
+      ]);
+    } catch (err) {
+      setError(err.response.data.message);
+    }
     setStudents(updatedStudents);
     setSchools(schools.filter(item => item.id !== schoolid));
     history.push('/');
@@ -59,7 +61,7 @@ const ManageSchool = (props) => {
 
   return (
     <div className="form-container">
-      {!!schoolid && <h3>Managing {school}</h3>}
+      {!!schoolid && <h2>Managing {school}</h2>}
       <form onSubmit={ev => updateSchool(ev)}>
         <input
           type="text" value={school} placeholder="school name"
