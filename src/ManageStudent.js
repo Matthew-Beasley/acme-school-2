@@ -11,7 +11,6 @@ const ManageStudent = (props) => {
 
 
   useEffect(() => {
-    console.log(studentid)
     if (studentid){
       setStudent(students.reduce((acc, pupil) => {
         if (pupil.id === studentid) {

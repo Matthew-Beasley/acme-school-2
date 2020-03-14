@@ -15,12 +15,21 @@ const readSchools = async () => {
 
 
 const updateSchools = async (name, id) => {
-  const sql = `
+  //I need to do student update in the same statement as school update but postgress
+  //only lets me do one query per prepared statement. Need to learn sql better :-)
+  const studentSql = `
+  UPDATE students
+  SET school = $1,
+      "schoolId" = $2
+  WHERE "schoolId" = $2;`;
+  await client.query(studentSql, [name, id])
+
+  const schoolSql = `
   UPDATE schools
   SET name = $1
   WHERE id = $2
   RETURNING *;`;
-  return (await client.query(sql, [name, id])).rows[0];
+  return (await client.query(schoolSql, [name, id])).rows[0];
 }
 
 

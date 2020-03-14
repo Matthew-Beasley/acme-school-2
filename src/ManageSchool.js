@@ -22,11 +22,14 @@ const ManageSchool = (props) => {
 
   const updateSchool = async (ev) => {
     ev.preventDefault();
+    let campusId, campusName;
     try {
       const response = await axios.put(`/api/schools/${schoolid}`, { name: school });
       setSchools(schools.map(campus => {
         if (campus.id === response.data.id) {
           campus.name = response.data.name;
+          campusId = response.data.id;
+          campusName = response.data.name;
         }
         return campus;
       }));
@@ -34,6 +37,14 @@ const ManageSchool = (props) => {
     } catch (err) {
       setError(err.response.data.message);
     }
+    const updated = students.map(pupil => {
+      if (pupil.schoolId === schoolid) {
+        pupil.schoolid = campusId;
+        pupil.school = campusName;
+      }
+      return pupil;
+    });
+    setStudents(updated);
     history.push('/');
   }
 
@@ -42,6 +53,7 @@ const ManageSchool = (props) => {
     const updatedStudents = students.map(pupil => {
       if (pupil.school === school) {
         pupil.school = null;
+        pupil.schoolId = null;
       }
       return pupil;
     });

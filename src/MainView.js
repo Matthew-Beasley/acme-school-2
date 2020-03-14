@@ -7,15 +7,6 @@ import AddSchool from './AddSchool';
 
 const MainView = ({ students, setStudents, schools, setSchools, setError }) => {
 
-  const getSchoolFromName = (schoolName) => {
-    return schools.reduce((acc, campus) => {
-      if (schoolName === campus.name) {
-        acc = campus;
-      }
-      return acc
-    }, {})
-  }
-
   const updateDbEnrollment = async (pupil) => {
     try {
       await axios.put(`/api/students/${pupil.id}`,
@@ -61,11 +52,9 @@ const MainView = ({ students, setStudents, schools, setSchools, setError }) => {
         <AddStudent
           students={students} setStudents={setStudents}
           schools={schools} setError={setError}
-          getSchoolFromName={getSchoolFromName}
         />
         <AddSchool
           schools={schools} setSchools={setSchools} setError={setError}
-          getSchoolFromName={getSchoolFromName}
         />
       </div>
       <div className="main-div">
