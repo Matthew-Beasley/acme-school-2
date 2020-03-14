@@ -24,15 +24,19 @@
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
-  width: 100%;
+  width: 98%;
 }
 
 #mainview-forms > form {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  width: 47%;
+  align-items: flex-start;
+  width: 48%;
   background-color: lightgray;
+}
+
+#mainview-forms > form > h3 {
+  align-self: center;
 }
 
 .main-div {

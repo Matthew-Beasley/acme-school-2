@@ -11,8 +11,9 @@ const AddSchool = (props) => {
     try {
       const response = await axios.post('/api/schools', { name: school });
       setSchools([...schools, response.data]);
+      setError('');
     } catch (err) {
-      setError(err);
+      setError(err.response.data.message);
     }
     setSchool('')
   }

@@ -12,8 +12,9 @@ const AddStudent = (props) => {
     try {
       const response = await axios.post('/api/students', { name: student, school });
       setStudents([...students, response.data]);
+      setError('');
     } catch (err) {
-      setError(err.message)
+      setError(err.response.data.message)
     }
     setStudent('');
   }
