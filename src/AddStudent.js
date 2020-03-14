@@ -3,9 +3,18 @@ import axios from 'axios';
 
 
 const AddStudent = (props) => {
-  const { students, setStudents, schools, getSchoolFromName, setError } = props;
+  const { students, setStudents, schools, setError } = props;
   const [student, setStudent] = useState('');
   const [school, setSchool] = useState('');
+
+  const getSchoolFromName = (schoolName) => {
+    return schools.reduce((acc, campus) => {
+      if (schoolName === campus.name) {
+        acc = campus;
+      }
+      return acc;
+    }, {});
+  }
 
 
   const createStudent = async (ev) => {

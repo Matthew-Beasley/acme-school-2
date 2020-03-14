@@ -13,7 +13,7 @@ const build = async () => {
   
   CREATE TABLE students (
     id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-    name VARCHAR(100) NOT NULL CHECK(char_length(name) > 0),
+    name VARCHAR(100) UNIQUE NOT NULL CHECK(char_length(name) > 0),
     "schoolId" UUID,
     school VARCHAR(100)
   );`;
