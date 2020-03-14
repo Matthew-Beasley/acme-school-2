@@ -1,1 +1,1 @@
-https://conbecs-acme-school.herokuapp.com/ | https://git.heroku.com/conbecs-acme-school.git
+https://conbecs-acme-school-2.herokuapp.com/ | https://git.heroku.com/conbecs-acme-school-2.git
