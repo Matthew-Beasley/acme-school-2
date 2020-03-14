@@ -37,13 +37,14 @@ const ManageSchool = (props) => {
     } catch (err) {
       setError(err.response.data.message);
     }
-    setStudents(students.map(pupil => {
+    const updated = students.map(pupil => {
       if (pupil.schoolId === schoolid) {
         pupil.schoolid = campusId;
         pupil.school = campusName;
       }
       return pupil;
-    }));
+    });
+    setStudents(updated);
     history.push('/');
   }
 

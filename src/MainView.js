@@ -35,13 +35,16 @@ const MainView = ({ students, setStudents, schools, setSchools, setError }) => {
       return;
     }
     let pupilObj = null;
-    setStudents(students.map(pupil => {
+    const updated = students.map(pupil => {
       if (pupil.id === studentid) {
+        console.log(school.name, school.id)
         pupil.school = school.name;
+        pupil.schoolId = school.id;
         pupilObj = pupil;
       }
       return pupil;
-    }));
+    });
+    setStudents(updated);
     updateDbEnrollment(pupilObj)
   }
 
