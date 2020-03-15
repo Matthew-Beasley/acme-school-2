@@ -22,14 +22,20 @@ const updateSchools = async (name, id) => {
   SET school = $1,
       "schoolId" = $2
   WHERE "schoolId" = $2;`;
-  await client.query(studentSql, [name, id])
-
+  
   const schoolSql = `
   UPDATE schools
   SET name = $1
   WHERE id = $2
   RETURNING *;`;
-  return (await client.query(schoolSql, [name, id])).rows[0];
+
+  let response;
+
+  Promise.all([
+    await client.query(studentSql, [name, id]),
+    response = await client.query(schoolSql, [name, id])
+  ]);
+  return response.rows[0];
 }
 
 
@@ -39,12 +45,15 @@ const deleteSchools = async (id) => {
   SET school = NULL,
       "schoolId" = NULL
   WHERE "schoolId" = $1;`;
-  await client.query(studentSql, [id]);
 
   const schoolSql = `
   DELETE FROM schools
   WHERE id = $1;`;
-  await client.query(schoolSql, [id]);
+
+  Promise.all([
+    await client.query(studentSql, [id]),
+    await client.query(schoolSql, [id])
+  ]);
 }
 
 module.exports = {
