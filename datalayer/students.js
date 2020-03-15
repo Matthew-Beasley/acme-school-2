@@ -14,7 +14,8 @@ const readStudents = async () => {
   return (await client.query('SELECT * FROM students')).rows;
 }
 
-
+//prof needs to share his auto generate code so I don't blow school away,
+//validated on the front end for now
 const updateStudents = async (name, school, id) => {
   const schoolHack = school;
   const sql = `

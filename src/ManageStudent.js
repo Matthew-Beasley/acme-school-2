@@ -21,6 +21,19 @@ const ManageStudent = (props) => {
     }
   }, []);
 
+  
+  useEffect(() => {
+    if (studentid) {
+      const pupilObj = students.reduce((acc, pupil) => {
+        if (pupil.id === studentid) {
+          acc = pupil;
+        }
+        return acc;
+      }, {});
+      setSchool(pupilObj.school);
+    }
+  }, []);
+
 
   const updateStudent = async (ev) => {
     ev.preventDefault();
